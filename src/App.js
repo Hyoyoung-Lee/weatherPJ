@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import Weather from "./Weather";
 
 
 // 클래스형으로 만들어보기!
@@ -21,12 +22,34 @@ class App extends React.Component {
     }
 
     render() {
-        const { isLoading } = this.state;
+        const { isLoading, stateWeather } = this.state;
         return (
-            <div>
-                {isLoading ? "Loading..." : "We are ready"}
+            <section class="weather_container">
+                {isLoading ? (
+                    <div class="loader">
+                            <span class={"loader_text"}> Loading... </span>
+                    </div>
+                ) : (
+                    stateWeather.map(weather => (
+                    /*{
+                        console.log(weather)
 
-            </div>
+                    // map으로부터 return 해야함
+                    return*/
+                        <Weather
+                                key={weather.index}
+                                cloud={weather.current.cloud}
+                                condition_text={weather.current.condition.text}
+                                condition_icon={weather.current.condition.icon}
+                                condition_code={weather.current.condition.code}
+                                temp_c={weather.current.temp_c}
+                                wind_kph={weather.current.wind_kph}
+                                humidity={weather.current.humidity}
+                                pressure_mb={weather.current.pressure_mb}
+                                location_name={weather.location.name} />
+                        )
+                    ))}
+            </section>
           );
     }
 }
