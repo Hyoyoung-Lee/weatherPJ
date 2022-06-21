@@ -3,10 +3,10 @@ import axios from 'axios';
 import {Link} from "react-router-dom";
 
 
-/*
-const cities = [ 'Seoul', 'Incheon', 'Daejeon', 'Mokpo', 'Gwangju', 'Gangreung', 'Daegu', 'Busan', '33.4996,126.5312' ];
 
-*/
+
+
+
 
 class Weather extends Component {
     // 상태 변수 정의
@@ -17,13 +17,17 @@ class Weather extends Component {
 
 
 
+
     componentDidMount() {
-        const cityName = 'Seoul';
+        const cities = [ 'Seoul', 'Incheon', 'Daejeon', 'Mokpo', 'Gwangju', 'Gangreung', 'Daegu', 'Busan', '33.4996,126.5312' ];
         const apiKey = 'dfe315ea852049d29eb63038221606';
-        const currentURL = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${cityName}&days=6`;
+        const cityName = cities.map( city => `${city}`)
+
+        const currentURL =`https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${cityName}&days=6`;
 
 
-        axios.get(currentURL)
+        // 초기 도시 리스트 보여주는 부분
+       axios.get(currentURL)
             .then(responseData => {
                 console.log(responseData);
                 const data = responseData.data;
@@ -61,6 +65,16 @@ class Weather extends Component {
         }
     }
     }
+
+
+/*Movie.propTypes = {
+    id: PropTypes.number.isRequired,
+    year: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    summary: PropTypes.string.isRequired,
+    poster: PropTypes.string.isRequired,
+    genres: PropTypes.arrayOf(PropTypes.string).isRequired
+};*/
 
 
 export default Weather;

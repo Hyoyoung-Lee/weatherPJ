@@ -77,22 +77,53 @@ const App = () => {
 export default App;
 
 const AppWrap = styled.div `
-    width: 100vw;
-    height: 100vh;
-    border: 1px red solid;
+    position: absolute;
+    width: 1920px;
+    height: 1080px;
+    left: 0px;
+    top: 0px;
+    
+
     
     .appContentWrap {
-       left: 50%;
-       top: 50%;
-       transform: translate(-50%, -50%);
-       position: absolute;
-       padding: 20px;
+        width: 312px;
+        height: 38px;
+        
+        font-family: 'Apple SD Gothic Neo';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 32px;
+        line-height: 38px;
+        
+        color: #F5F5F5;
+        
+        
+        /* Inside auto layout */
+        
+        flex: none;
+        order: 0;
+        flex-grow: 0;
+        :focus { outline:none;}
        }
 `;
 
 const ListWrap = styled.div `
-    margin-top: 60px;
-    padding: 10px;
-    border: 1px black solid;
-    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 30px;
+    gap: 30px;
+    
+    width: 343px;
+    height: 256px;
+    
+    background: rgba(31, 62, 79, 0.5);
+    border-radius: 20px;
+    
+    /* Inside auto layout */
+    
+    flex: none;
+    order: 0;
+    flex-grow: 0;
 `;
