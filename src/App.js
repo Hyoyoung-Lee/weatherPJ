@@ -1,57 +1,98 @@
-import React from "react";
-import axios from "axios";
-import Weather from "./Weather";
+import React, {useState} from 'react';
+import {Route, Routes} from 'react-router-dom';
+import Weather from './components/Weather.js';
+import WeatherInfo from "./components/WeatherInfo";
+import styled from 'styled-components';
+import axios from 'axios';
 
 
-// 클래스형으로 만들어보기!
-class App extends React.Component {
-    state = {
-        isLoading: true,
-        stateWeather: []
-    };
+function App() {
 
-    getWeather = async () => {
-        // const weathers : axios 해서 온 data를 잡아야 state에 사용할 수 있음
-        const axiosWeather = await axios.get("https://api.weatherapi.com/v1/forecast.json?key=dfe315ea852049d29eb63038221606&q=Seoul&days=6");
-        this.setState({ stateWeather : axiosWeather.data, isLoading : false });
-        console.log(axiosWeather.data);
-    };
+    const apiKey = "dfe315ea852049d29eb63038221606";
+    const [location, setLocation] = useState('');
+    const [result, setResult] = useState({});
 
-    componentDidMount() {
-        this.getWeather();
-    }
+    const url = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${location}&days=6`;
 
-    render() {
-        const { isLoading, stateWeather } = this.state;
-        return (
-            <section class="weather_container">
-                {isLoading ? (
-                    <div class="loader">
-                            <span class={"loader_text"}> Loading... </span>
-                    </div>
-                ) : (
-                    stateWeather.map(weather => (
-                    /*{
-                        console.log(weather)
 
-                    // map으로부터 return 해야함
-                    return*/
-                        <Weather
-                                key={weather.index}
-                                cloud={weather.current.cloud}
-                                condition_text={weather.current.condition.text}
-                                condition_icon={weather.current.condition.icon}
-                                condition_code={weather.current.condition.code}
-                                temp_c={weather.current.temp_c}
-                                wind_kph={weather.current.wind_kph}
-                                humidity={weather.current.humidity}
-                                pressure_mb={weather.current.pressure_mb}
-                                location_name={weather.location.name} />
-                        )
-                    ))}
-            </section>
-          );
-    }
+    const searchWeather = async (e) => {
+        if(e.key === 'Enter') {
+            try {
+             const data = await axios({
+                 method: 'get',
+                 url: url
+             })
+                console.log(data);
+                setResult(data);
+            }
+            catch (err) {
+                alert(err);
+            }
+            }
+        }
+
+
+
+    return(
+        <AppWrap>
+
+            <div className='appContentWrap'>
+                <input
+                    placeholder='Search for city weather' value={location}
+                    onChange={(e)=>setLocation(e.target.value)}  type='text'
+                    onKeyDown={searchWeather}
+                />
+                {
+                    Object.keys(result).length !== 0 && (
+                        <ListWrap>
+                            <div className='city'> {result.data.location.name} </div>
+                            <div className='temp'> {result.data.current.temp_c} </div>
+                            <div className='sky'> {result.data.current.condition.text} </div>
+                        </ListWrap>
+                )}
+
+
+            </div>
+
+
+
+        <div className="App">
+
+                <Routes>
+                    <Route path="/" element={<Weather />} />
+                    <Route path="/WeatherInfo" element={<WeatherInfo />} />
+                </Routes>
+
+        </div>
+        </AppWrap>
+    )
 }
 
+/*
+const App = () => {
+    return <Weather /> ;
+};
+*/
+
 export default App;
+
+const AppWrap = styled.div `
+    width: 100vw;
+    height: 100vh;
+    border: 1px red solid;
+    
+    .appContentWrap {
+       left: 50%;
+       top: 50%;
+       transform: translate(-50%, -50%);
+       position: absolute;
+       padding: 20px;
+       }
+`;
+
+const ListWrap = styled.div `
+    margin-top: 60px;
+    padding: 10px;
+    border: 1px black solid;
+    border-radius: 8px;
+`;
